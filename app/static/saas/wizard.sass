@@ -1,0 +1,239 @@
+$primary-color: #333
+
+.swMain
+	position: relative
+	display: block
+	margin: 0
+	padding: 0
+	border: 0 solid #CCC
+	overflow: visible
+	float: left
+	width: 100%
+
+.swMain 
+	.stepContainer
+		display: block
+		position: relative
+		margin: 0
+		padding: 0   
+		border: 0 solid #CCC
+		overflow-x: hidden
+		overflow-y: scroll
+		clear: both
+		height: 300px
+
+.swMain 
+	.stepContainer 
+		div.content
+			display: block
+			position: absolute 
+			float: left
+			margin: 0
+			padding: 5px
+			border: 1px solid #CCC
+			font: normal 12px Verdana, Arial, Helvetica, sans-serif
+			color: #5A5655
+			background-color: #F8F8F8
+			height: 300px
+			text-align: left
+			overflow: visible
+			z-index: 88
+			-webkit-border-radius: 5px
+			-moz-border-radius  : 5px
+			width: 100%
+			clear: both
+
+.swMain
+	ul.anchor
+		position: relative
+		display: block
+		float: left
+		list-style: none
+		padding: 0
+		margin: 10px 0   
+		clear: both
+		border: 0 solid #CCCCCC
+		background: transparent
+
+.swMain 
+	ul.anchor 
+		li
+			position: relative
+			display: block
+			margin: 0
+			padding: 0 3px
+			border: 0 solid #E0E0E0
+			float: left
+
+/* Anchor Element Style */
+.swMain 
+	ul.anchor 
+		li 
+			a
+				display: block
+				position: relative
+				float: left
+				margin: 5px 0 0 0
+				padding: 3px
+				height: 70px
+				width: 70px
+				text-decoration: none
+				outline-style: none
+				-moz-border-radius: 5px
+				-webkit-border-radius: 100px
+				z-index: 99
+
+.swMain 
+	ul.anchor 
+		li 
+			a 
+				.stepNumber
+					position: relative
+					float: left
+					width: 70px
+					text-align: center
+					padding: 11px 0px 0px 0px
+					font: 35px sans-serif
+					cursor: pointer
+
+.swMain 
+	ul.anchor 
+		li 
+			a 
+				.stepDesc
+					position: relative
+					display: block
+					float: left
+					text-align: left
+					padding: 5px
+					font: bold 20px Verdana, Arial, Helvetica, sans-serif
+
+.swMain 
+	ul.anchor 
+		li 
+			a.selected
+				color: #F8F8F8
+				background: #117CEA
+				border: 1px solid #0A6FD8
+				cursor: text
+				-moz-box-shadow: 5px 5px 8px #888
+				-webkit-box-shadow: 5px 5px 8px #888
+				box-shadow: 5px 5px 8px #888
+
+.swMain 
+	ul.anchor 
+		li 
+			a.selected:hover
+				color: #F8F8F8
+				background: #3B92EC
+				cursor: pointer
+
+.swMain
+	ul.anchor 
+		li 
+			a.done 
+				position: relative
+				color: #FFF
+				background: rgba(76, 152, 216, 0.45)
+				border: 1px solid #9CC1EF
+				z-index: 99
+
+.swMain
+	ul.anchor
+		li 
+			a.done:hover 
+				color: #5A5655
+				background: rgba(76, 152, 216, 0.45)
+				border: 1px solid #9CC1EF
+
+.swMain 
+	ul.anchor 
+		li 
+			a.disabled
+				color: #CCCCCC 
+				background: #F8F8F8
+				border: 1px solid #CCC  
+				cursor: text  
+
+.swMain 
+	ul.anchor 
+		li 
+			a.disabled:hover
+				color: #CCCCCC
+				background: #F8F8F8    
+
+.swMain 
+	ul.anchor 
+		li 
+			a.error
+				color: #6c6c6c !important
+				background: #f08f75 !important
+				border: 1px solid #fb3500 !important
+
+.swMain 
+	.buttonNext
+		display: block
+		float: right
+		margin-bottom: 0
+		padding: 6px 12px
+		text-decoration: none
+		text-align: center
+		font-size: 14px
+		font-weight: normal
+		line-height: 1.42857143
+		text-align: center
+		white-space: nowrap
+		vertical-align: middle
+		-ms-touch-action: manipulation
+		touch-action: manipulation
+		-webkit-user-select: none
+		-moz-user-select: none
+		-ms-user-select: none
+		user-select: none
+		background-image: none
+		border: 1px solid transparent
+		border-radius: 4px
+		color: #FFF
+		background-color: #337ab7
+		border-color: #2e6da4
+
+.swMain 
+	.buttonDisabled
+		color: #F8F8F8 !important
+		background-color: #CCCCCC !important
+		border: 1px solid #CCCCCC !important
+		cursor: text  
+
+.swMain 
+	.buttonPrevious
+		display: block
+		float: right
+		margin: 5px 3px 0 3px
+		padding: 5px
+		text-decoration: none
+		text-align: center
+		font: bold 13px Verdana, Arial, Helvetica, sans-serif
+		width: 100px
+		color: #FFF
+		outline-style: none
+		background-color: #5A5655
+		border: 1px solid #5A5655
+		-moz-border-radius: 5px
+		-webkit-border-radius: 5px  
+
+.swMain 
+	.buttonFinish
+		display: block
+		float: right
+		margin: 5px 10px 0 3px
+		padding: 5px
+		text-decoration: none
+		text-align: center
+		font: bold 13px Verdana, Arial, Helvetica, sans-serif
+		width: 100px
+		color: #FFF
+		outline-style: none
+		background-color: #5A5655
+		border: 1px solid #5A5655
+		-moz-border-radius: 5px
+		-webkit-border-radius: 5px  

@@ -1,0 +1,18 @@
+{
+  "name": "centralizacion",
+  "version": "0.1.0",
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "express": "4.9.8",
+    "font-awesome": "^4.7.0",
+    "mssql": "^3.1.2",
+    "multer": "^1.1.0",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^6.4.5",
+    "serve-favicon": "^2.1.6",
+    "soap": "^0.31.0",
+    "socket.io": "^1.2.0",
+    "swig": "^1.4.2",
+    "xml2js": "^0.4.23"
+  }
+}

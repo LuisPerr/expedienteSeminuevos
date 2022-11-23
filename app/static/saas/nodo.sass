@@ -1,0 +1,334 @@
+/* Encabezado del Nodo */
+#details
+    width: 15%
+    position: absolute
+    right: 0
+    border-style: solid
+    border-color: #BBB9B9
+    background-color: rgba(204, 203, 203, 0.27)
+    border-left-width: 1px
+    border-top-width: 1px
+    border-bottom-width: 1px
+    border-right-width: 0px
+    padding: 4px
+    font-size: 11px
+    border-radius: 5px 0px 0px 5px
+    margin-top: 31px
+
+#header
+    position: absolute
+    top: 0
+    left: 0
+    width: 415px
+    height: 33px
+    margin-top: -20px
+    margin-left: calc(50% - 207px)
+    border: 1px solid #BBB9B9
+    background-color: rgba(204, 204, 204, 0.57)
+    border-radius: 0px 0px 5px 5px
+
+#depends
+    position: absolute
+    top: 0
+    left: 0
+    width: 131px
+    height: 33px
+    margin-top: -20px
+    margin-left: calc(50% - 325px)
+    border: 1px solid #bbb9b9
+    background-color: rgb(241, 241, 241)
+    border-radius: 0px 0px 0px 5px
+    font-size: 12px
+    padding-top: 7px
+    text-align: center
+    color: rgba(56,56,56,0.85)
+    font-weight: 300
+    cursor: pointer
+
+#extends
+    position: absolute
+    top: 0
+    left: 0
+    width: 131px
+    height: 33px
+    margin-top: -20px
+    margin-left: calc(50% + 195px)
+    border: 1px solid #bbb9b9
+    background-color: #f1f1f1
+    border-radius: 0px 0px 5px 0px
+    font-size: 12px
+    padding-top: 7px
+    text-align: center
+    color: rgba(56,56,56,0.85)
+    font-weight: 300
+    cursor: pointer
+
+#folio
+    font-size: 16px
+    margin-top: 4px
+    margin-left: -1px
+    font-weight: 500
+    color: rgb(97, 96, 96)
+    padding-left: 0
+    padding-right: 0
+    text-align: center
+
+.estatus
+    background-color: rgba(83, 181, 132, 0.88)
+    border: 1px solid rgba(83,181,132,0.88)
+    margin-top: -1px
+    height: 32px
+    margin-right: 0px
+    padding-top: 5px
+    border-radius: 0px 0px 5px 0px
+    position: absolute
+    right: 0
+    color: white
+    text-align: center
+
+.cancelado
+    background-color: rgba(225, 11, 11,1)
+    border: 1px solid rgba(225, 11, 11,1)
+    margin-top: -1px
+    height: 32px
+    margin-right: 0px
+    padding-top: 5px
+    border-radius: 0px 0px 5px 0px
+    position: absolute
+    right: 0
+    color: white
+    text-align: center
+
+.etiqueta
+    font-size: 13px
+    font-weight: 700
+    color: #38424E  
+
+.texto
+    font-size: 14px
+    color: #828282
+    font-weight: 300
+
+/* Contenedores */
+#navigator
+    padding-top: 16px
+
+/* Clases generales */
+.linea
+    padding-left: 15px
+    padding-right: 15px
+
+.progresoBarra
+    margin-top: 10px
+
+.documento
+    width: 350px
+
+.botonera
+    float: right
+
+.alerta
+    position: absolute
+    top: 0
+    right: 0
+    width: 35px
+    background-color: rgba(234, 206, 65, 0.93)
+    height: 35px
+    border-radius: 35px
+    margin-top: -17px
+    margin-right: -16px
+    color: white
+    padding-top: 7px
+    font-weight: bold
+    font-size: 14px
+    z-index: 1
+
+.logotipo
+    padding-top: 10px
+
+.nombre
+    color: rgba(56, 66, 78, 0.8)
+    margin-top: 5px
+
+.descripcion
+    color: rgba(56, 66, 78, 0.51)
+    margin-top: -7px
+
+.numero
+    color: rgba(56, 66, 78, 0.51)
+    margin-top: -5px
+    position: absolute
+    top: 0
+    left: 0
+    padding-left: 10px
+    padding-top: 10px
+    font-size: 14px
+
+#menu
+    font-size: 24px
+    margin-top: -4px
+
+#avatar
+    width: 42px
+    border-radius: 20px
+    position: absolute
+    margin-top: -10px
+    right: 0
+
+.navHeader
+    background-color: #38424E
+    border-color: #38424E
+
+.blanco
+    color: white
+
+#navigate
+    text-align: center
+
+#mnuAvatar
+    width: 350px
+
+#imgNothing
+    padding-left: 60px
+.anavigatorNode
+    cursor: pointer
+
+.nodoDisabled
+    background-color: rgb(238, 238, 238) !important
+    color: rgba(128, 128, 128, 0.71) !important
+
+.botoneraDocumento
+    float: right
+
+
+/*Estilos para el visor de documentos*/
+
+#hideFullMenu
+    background-color: transparent
+    height: 76px
+    position: absolute
+    right: 0
+    margin-right: 72px
+    top: 0
+    margin-bottom: 30px
+    width: 150px
+    z-index: 2147483647
+
+#hideFullContent
+    position: relative
+
+#ifDocument
+    width: 100%
+    height: 500px
+
+#ifDocument2
+    width: 100%
+    height: 500px
+
+.docDownload
+    display: none
+
+/* Controles Upload */
+
+.btn-file
+    position: relative
+    overflow: hidden
+
+.btn-file input[type=file] 
+    position: absolute
+    top: 0
+    right: 0
+    min-width: 100%
+    min-height: 100%
+    font-size: 100px
+    text-align: right
+    filter: alpha(opacity=0)
+    opacity: 0
+    outline: none
+    background: white
+    cursor: inherit
+    display: block
+
+/*  iFrame de upload */
+
+#frameUpload
+    width: 100%
+    height: 108px
+
+#labelArchivo
+    margin-left: 16px
+    margin-bottom: 6px
+    width: 89%
+
+#progressDiv
+    width: 89%
+    margin-left: 15px
+    margin-top: 10px
+
+#alertaSuccess
+    width: 100%
+
+#iconSuccess
+    font-size: 30px
+    display: block
+    float: right
+    margin-right: -10px
+
+.cerrado
+    background-color: rgba(51, 122, 183, 0.25) !important
+    z-index: 100 !important
+
+.cerradoLabel
+    position: absolute
+    top: 0
+    right: 0
+    font-size: 12px
+    text-align: -webkit-center
+    padding-left: 5px
+    color: white
+    width: 66px
+    height: 20px
+    padding-left: 0
+    padding-top: 0
+    padding-right: 0
+    font-weight: 100
+    border-radius: 0px 5px 0px 5px
+
+.cerradoCompletado
+    background-color: rgba(56, 66, 78, 0.91)
+
+.cerradoPendiente
+    background-color: rgba(185, 185, 185, 0.18)
+    color: rgba(128, 128, 128, 0.67)
+
+.oculto
+    display: none
+
+.desdeLabel
+    position: absolute
+    left: 0
+    bottom: 0
+    font-weight: 200
+    padding-bottom: 1px
+    padding-left: 2px
+    display: inline-block
+
+.desdeTexto
+    padding-left: 2px
+    display: inline-block
+    font-size: 11px
+
+.hastaLabel
+    position: absolute
+    right: 0
+    bottom: 0
+    font-weight: 200
+    padding-bottom: 1px
+    padding-left: 2px
+
+.noExiste
+    color: gray
+    border-style: dotted
+    border-width: 3px
+    background-color: rgba(128, 128, 128, 0.32)
+    border-color: rgba(128, 128, 128, 0.29)

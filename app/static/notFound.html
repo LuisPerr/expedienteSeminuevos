@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>Expediente Unidad Seminuevo</title>
+        <style>
+                body,
+                html {
+                        height: 100%;
+                }
+
+                .back {
+                        background-image: url('images/fondo.png');
+                        height: 100%;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                }
+
+                #outPopUp {
+                        position: absolute;
+                        width: 34%;
+                        height: 200px;
+                        z-index: 15;
+                        top: 56%;
+                        left: 50%;
+                        margin: -100px 0 0 -150px;
+                }
+
+                label{
+                        font-size: 49px;
+                        color:#C3C3C3;
+                }
+        </style>
+</head>
+
+<body class="back">
+        <div id="outPopUp">
+                <label> Inicia sesion desde el panel de aplicaciones </label>
+        </div>
+</body>
+
+<script>
+        setTimeout(()=>{
+                window.close();
+        },3000);
+</script>
+
+</html>

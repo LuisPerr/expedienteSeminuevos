@@ -1,0 +1,1 @@
+var empleadoUrl=global_settings.urlCORS+"/api/empleadoApi/";registrationModule.factory("empleadoRepository",function(e){return{get:function(t){return e.get(empleadoUrl+"1|"+t)},update:function(t){return e.post(empleadoUrl+"2|"+t)}}});

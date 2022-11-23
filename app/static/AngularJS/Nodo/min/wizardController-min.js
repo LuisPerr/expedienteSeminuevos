@@ -1,0 +1,1 @@
+registrationModule.controller("nodoController",function(o,n,t,i,e){o.oneAtATime=!0,o.init=function(){}});

@@ -1,0 +1,1 @@
+var alertaUrl=global_settings.urlCORS+"/api/alertaapi/";registrationModule.factory("alertaRepository",function(t){return{get:function(r){return t.get(alertaUrl+"0|"+r)},getByNodo:function(r,a,e){return t.get(alertaUrl+"1|"+r+"|"+a+"|"+e)},update:function(r){return t.post(alertaUrl+"2|"+r)}}});

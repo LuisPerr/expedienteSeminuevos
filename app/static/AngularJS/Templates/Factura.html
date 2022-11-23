@@ -1,0 +1,116 @@
+<link href="../../css/nodo.css" rel="stylesheet" />
+<link href="../../css/factura.css" rel="stylesheet" />
+<div cg-busy="myPromise" ng-init="init()" resize>
+    <div id="contenedor">
+        <section>
+            <div class="col-xs-12" id="folio">
+                <div id="hideFullContent" ng-class="{ 'noExiste': documento == '' }">
+                    <div id="hideFullMenu"></div>
+                    <div id="divDocumento"></div>
+                    <br>
+                    <button type="button" class="btn btn-info" ng-click="cierraVentana()" id="btnSalir" data-loading-text="Cerrando..."><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Salir</button>
+                </div>
+            </div>
+        </section>
+        <!---->
+        <!--Agregado LMS-->
+        <div id="divControles">
+            <section>
+                <div class="row linea">
+                    <div class="col-md-6">
+                        <br>
+                        <h4><strong>Documentos disponibles</strong></h4>
+                        <div class="input-group" ng-repeat="documento in listaDocumentos"> <span class="input-group-addon"> <input type="checkbox" ng-model="documento.seleccionado" ng-change="SeleccionaDocumento(documento)" aria-label="Checkbox for following text input"> </span> <input ng-model="documento.nombreDocumento" type="text" class="form-control" aria-label="Text input with checkbox">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="row linea">
+                <div class="col-md-12">
+                    <br>
+                    <input type="radio" name="radiog_dark" id="radio1" class="css-checkbox" checked="checked" ng-model="respuesta.opcion" value="1" ng-show="respuesta.opcion">
+                    <label for="radio1" class="css-label radGroup2" ng-show="btnView"><h5>La Factura Coincide&nbsp;&nbsp;</h5></label>
+                    </input>
+                    <input type="radio" name="radiog_dark" id="radio2" class="css-checkbox" checked="checked" ng-model="respuesta.opcion" value="2">
+                    <label for="radio2" class="css-label radGroup2" ng-show="btnView"><h5>La Factura NO Coincide</h5></label>
+                    </input>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="viewerDocs" ng-controller="documentoController">
+                    <div class="btn-group" class="col-md-14">
+                        <span> <!--ng-hide="respuesta.opcion == 1"-->
+                            <button type="button" class="btn btn-warning" tooltip="Cargar documento" ng-click="openUpload()" ng-show="subeComprobante && !cancelada">Cargar Archivo Recep. Material</button>
+                        </span>
+                        <span> <!-- ng-hide="respuesta.opcion == 1"-->
+                            <button class="btn btn-success" tooltip="Comparar documentos" ng-click="CompararDocumentos()">Comparar Documentos</button>
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-primary" tooltip="Regresar" ng-click="Regresar()" id="btnRegresar">Regresar</button>
+                        </span>
+                        <span>
+                            <button type="button" class="btn btn-primary" tooltip="Confirmar documentos" ng-click="Confirmar()" id="btnConfirmar" data-loading-text="Confirmando..."
+                            ng-hide="!btnView" ng-disabled="confirma == 0" ng-show="btnView && !cancelada">
+                            <!--span class="glyphicon glyphicon-play " aria-hidden="true"-->
+                            </span>Confirmar</button>
+                        </span>
+                        <!-- LQMA 04082017 boton para pagos externos (efectivo, otro medoto de pago)-->
+                        <span>
+                            <button type="button" class="btn btn-info" tooltip="Pago externo" ng-click="modalPagoExterno()" id="btnPagoExterno" data-loading-text="Procesando..."
+                                ng-disabled="!aplicaPago" ng-show="aplicaPago">
+                            </span>Pago externo</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- The Modal -->
+        <div class="modal fade" id="modalPagoExterno">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Pago externo</h4>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <h3> Esta seguro que desea avanzar los nodos de esta Orden de compra ? </h3>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class=" btn btn-info" ng-click="PagoExterno()">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Termina agregado LMS-->
+        <div class="modal fade" id="modalConfirmar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h3 class="modal-title">Confirmar</h3>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <h4> ¿Esta seguro que desea confirmar sin factura de proveedor? </h4>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class=" btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class=" btn btn-info" ng-click="ConfirmaSinFactura()">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function nodisponible() {
+    var scope = angular.element($("#viewerDocs")).scope();
+    scope.$apply(function() {
+        scope.NoDisponible();
+    })
+}
+</script>

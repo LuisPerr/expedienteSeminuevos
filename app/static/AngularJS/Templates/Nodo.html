@@ -1,0 +1,258 @@
+﻿<link href="../../css/nodo.css" rel="stylesheet" />
+<div cg-busy="myPromise" ng-init="init()" resize>
+	<div class="divSeleccioneParametros" ng-show="!cargaDocs">
+		<h2> Selecciona parametros de busqueda </h2>
+		<i class="fa fa-ban" aria-hidden="true"></i>
+	</div>
+	<div ng-show="cargaDocs">
+		<div class="row headerDivsData">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-picture-o  fa-2x" aria-hidden="true"></i>
+							<button class="btnVerUnidad" ng-click="showCarouselUnidad()">
+								Ver Fotos de la Unidad
+							</button>
+
+						</div>
+
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-building-o  fa-2x" aria-hidden="true"></i>
+							<label> Empresa: &nbsp;&nbsp; {{empresaBusqueda}} </label>
+
+						</div>
+
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-home  fa-2x" aria-hidden="true"></i>
+							<label> Sucursal: &nbsp;&nbsp; {{sucursalBusqueda}} </label>
+
+						</div>
+
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-map-marker  fa-2x" aria-hidden="true"></i>
+							<label> Ubicación: &nbsp;&nbsp; {{dataAutomovil.ubicacion}} </label>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<br><br><br>
+			<div class="col-md-12" style="margin-top: 20px;">
+				<div class="row">
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-car  fa-2x" aria-hidden="true"></i>
+							<label> Auto: &nbsp;&nbsp; {{dataAutomovil.VEH_TIPOAUTO}} </label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-star  fa-2x" aria-hidden="true"></i>
+							<label> Marca: &nbsp;&nbsp; {{dataAutomovil.VEH_SMARCA}} </label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-calendar  fa-2x" aria-hidden="true"></i>
+							<label> Año: &nbsp;&nbsp; {{dataAutomovil.VEH_ANMODELO}} </label>
+						</div>
+					</div>
+					<div class="col-sm-3">
+
+						<div class="divHeaderBusqueda">
+							<i class="fa fa-hashtag  fa-2x" aria-hidden="true"></i>
+							<label> Vin: &nbsp;&nbsp; {{dataAutomovil.VEH_NUMSERIE}} </label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<style>
+			.pestana {
+				width: 250px;
+				padding: 15px 20px;
+				background-color: #f4f4f4;
+				cursor: pointer;
+				display: inline-block;
+			}
+
+			.pestana:hover {
+				background-color: rgb(6, 84, 228);
+				color: white;
+			}
+
+			.p-activa {
+				background-color: rgb(0, 70, 199);
+				color: white;
+			}
+		</style>
+
+		<div style="padding-left: 30px; background-color: #f4f4f4;" ng-if="tipoProceso == 2">
+			<div class="pestana" ng-class="{'p-activa': pestania == 1}" ng-click="openTab(1)">Documentos de la unidad
+			</div>
+			<div class="pestana" ng-class="{'p-activa': pestania == 2}" ng-click="openTab(2)">Documentos del cliente
+			</div>
+		</div>
+		<hr>
+		<div class="row" ng-show="pestania == 1">
+			<div class="row">
+				<div class="col-md-4">
+					<label style="margin-left: 30px; margin-top: 2px; margin-left: 30px; font-size: 27px;"
+						class="pull-left">
+						{{tipoExpediente}} / {{tipoPersona}} / {{tipoReglaExpediente}}
+					</label>
+				</div>
+				<div class="col-md-4" style="text-align: center;">
+					<!-- <label ng-show="unidadFacturada == 1"
+						style="font-size: 19px; background: #FFCA34; border-radius: 8px; width: 400px;">
+						<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp; {{textoUnidadFacturada}}
+					</label> -->
+					<label style="margin-left: 30px; margin-top: 2px; margin-left: 30px; font-size: 27px;"
+						class="pull-left">
+						{{folioAMostrar}}
+					</label>
+				</div>
+				<div class="col-md-4" ng-show="allPermisosDocumentos.GenerarReporteIndividual == 1">
+					<button style="margin-right: 30px;" class="btn btn-success pull-right"
+						ng-click="generarReporteIndividual()" ng-hide="esUsuarioEnlace">
+						Generar Reporte
+					</button>
+					<button style="margin-right: 30px;" class="btn btn-success pull-right" ng-click="setTab(0)">
+						Documentos Faltantes
+					</button>
+				</div>
+				<br><br>
+				<div class="col-md-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content" style="padding: 20px;">
+							<div dx-data-grid="dataGridOptions" dx-item-alias="documento"
+								style="max-width: 100%; border-bottom: 1px solid #CACACA;">
+								<div data-options="dxTemplate: { name: 'nombreDocumento' }">
+									<p>{{documento.data.doc_nombre}}</p>
+								</div>
+								<!-- <div data-options="dxTemplate:{ name:'verGuia' }"
+									style="max-width: 100%; height:100%; text-align: center !important;">
+									<button
+										class="btn btn-info btn-circle" ng-click="verGuiaF(documento.data)"
+										title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</div> -->
+								<div data-options="dxTemplate:{ name:'openUpload' }" style="text-align: center !important;">
+									<div class="col-md-12" ng-show="allPermisosDocumentos.SubirDocumentos == 1">
+										<div class="picture"
+											ng-show="documento.data.doc_usuarios == 1 && unidadFacturada == 0">
+											<img style="width: 100%" src="../images/autorizacion@2x.png"
+												title="Documento Adjuntado"
+												ng-show="documento.data.doc_varios == 0 && (documento.data.id_estatus == 1 || documento.data.id_estatus == 2)" />
+											<img style="width: 100%" src="../images/subir@2x.png" class="picture-src"
+												title="Subir Archivo pdf"
+												ng-show="documento.data.doc_varios == 1 || (documento.data.id_estatus == 3 || documento.data.id_estatus == null)" />
+											<input type="file" ng-model="documento.data.archivo" id="wizard-picture"
+												ng-file-select="onFileSelect($files)" class="picture"
+												accept="application/pdf"
+												onchange="angular.element(this).scope().openUploadModal(angular.element(this).scope().documento.data.id_documento)"
+												ng-disabled="documento.data.doc_varios == 0 && (documento.data.id_estatus == 1 || documento.data.id_estatus == 2)">
+										</div>
+									</div>
+									<div class="col-md-12"
+										ng-show="allPermisosDocumentos.SubirSiempreDocumentos == 1 && unidadFacturada == 0">
+										<div class="picture" ng-show="documento.data.doc_usuarios == 1">
+											<img style="width: 100%" src="../images/subir@2x.png" class="picture-src"
+												title="Subir Archivo pdf" />
+											<input type="file" ng-model="documento.data.archivo" id="wizard-picture"
+												ng-file-select="onFileSelect($files)" class="picture"
+												accept="application/pdf"
+												onchange="angular.element(this).scope().openUploadModal(angular.element(this).scope().documento.data.id_documento)">
+										</div>
+									</div>
+								</div>
+								<div data-options="dxTemplate:{ name:'verDocumento' }"
+									style="max-width: 100%; height:100%; text-align: center !important;">
+									<button
+										ng-show="(allPermisosDocumentos.VerDocumentos == 1) && (documento.data.existe == 1 || documento.data.doc_usuarios == 0)"
+										class="btn btn-success btn-circle" ng-click="verPdf(documento.data)"
+										title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</div>
+								<div data-options="dxTemplate: { name: 'estatus' }"
+									style="max-width: 100%; height:100%; text-align: center !important;">
+									<div ng-show ="!esUsuarioEnlace">
+										<div ng-show="documento.data.doc_usuarios == 1"
+											ng-class="{estatusAprobado: documento.data.id_estatus == 2, estatusEspera: documento.data.id_estatus == 1, estatusRechazado: documento.data.id_estatus == 3}">
+											<label>{{documento.data.est_descripcion}}</label>
+										</div>
+										<div class="estatusAprobado"
+											ng-show="documento.data.doc_usuarios == 0 && documento.data.existe == 1"
+											style="max-width: 100%; height:100%; text-align: center !important;">
+											<label>Documento Cargado</label>
+										</div>
+										<div class="estatusRechazado"
+											ng-show="documento.data.doc_usuarios == 0 && documento.data.existe == 0 && documento.data.doc_opcional == 0"
+											style="max-width: 100%; height:100%; text-align: center !important;">
+											<label>Documento No Cargado</label>
+										</div>
+									</div>
+									<div ng-show ="esUsuarioEnlace">
+										<div ng-show="documento.data.doc_usuarios == 1"
+											ng-class="{estatusAprobado: documento.data.estatusEnlace == 2, estatusEspera: documento.data.estatusEnlace == 1, estatusRechazado: documento.data.estatusEnlace == 3, estatusEsperaGerente: documento.data.estatusEnlace == 0}">
+											<label ng-show="documento.data.estatusEnlace !== 0">{{documento.data.descripcionEstatusEnlace}}</label>
+											<label ng-show="documento.data.estatusEnlace === 0">Documento en revision por Gerente</label>
+										</div>
+										<div class="estatusAprobado"
+											ng-show="documento.data.doc_usuarios == 0 && documento.data.existe == 1"
+											style="max-width: 100%; height:100%; text-align: center !important;">
+											<label>Documento Cargado</label>
+										</div>
+										<div class="estatusRechazado"
+											ng-show="documento.data.doc_usuarios == 0 && documento.data.existe == 0 && documento.data.doc_opcional == 0"
+											style="max-width: 100%; height:100%; text-align: center !important;">
+											<label>Documento No Cargado</label>
+										</div>
+									</div>
+								</div>
+								<div data-options="dxTemplate: { name: 'opcional' }"
+									style="max-width: 100%; height:100%; text-align: center !important;">
+									<p>{{documento.data.doctoOpcional}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" ng-show="pestania == 2">
+			<div class="col-sm-12">
+				<button class="btn btn-warning pull-right" ng-show="mostrarTomarDocs"
+					style="margin-bottom: 15px; margin-right: 50px;" ng-click="congelarDocumentos()">Tomar documentos
+					para mi Expediente {{ idHistorico }}</button>
+				<iframe ng-src="{{urlExpedienteCliente}}" width="100%" height="1000" frameborder="0">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="loadModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="cargandoCXP">
+			<div class="loader_CompletoCXP"></div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+#finder
+{
+	background-color: #EBECEC;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 300px;
+    width: 600px;
+    height: 100%;
+    color: gray;
+    display: none;
+ }
+    

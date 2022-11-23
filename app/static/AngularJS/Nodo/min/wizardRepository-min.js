@@ -1,0 +1,1 @@
+var nodoUrl=global_settings.urlCORS+"/api/nodoapi/";registrationModule.factory("nodoRepository",function(o){return{get:function(n){return o.get(nodoUrl+"1|"+n)},update:function(n){return o.post(nodoUrl+"2|"+n)}}});

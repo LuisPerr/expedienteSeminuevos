@@ -1,0 +1,1702 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="es">
+<!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Expediente Digital Seminuevos</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
+
+	<!-- Libreria de Google Fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900italic' rel='stylesheet'
+		type='text/css'>
+
+	<!--Hojas de estilos-->
+	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link href="css/main.css" rel="stylesheet" />
+	<link href="css/roundabout.css" rel="stylesheet" />
+	<link href="css/search.css" rel="stylesheet" />
+	<link href="css/windows8.css" rel="stylesheet" />
+
+	<!--Loading-->
+	<link href="css/toastr.css" rel="stylesheet" />
+	<link href="css/angular-busy.css" rel="stylesheet" />
+
+	<!--Librearias JQuery y Bootstrap-->
+	<script src="js/jquery-2.1.4.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/jquery.roundabout.js"></script>
+
+	<!-- Sidebar -->
+	<link rel="stylesheet" type="text/css" href="css/sidebar/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="css/sidebar/component.css" />
+	<link rel="stylesheet" type="text/css" href="css/sidebar/body.css" />
+	<script src="js/sidebar/modernizr.custom.js"></script>
+
+	<!-- DataTables -->
+	<link href="plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
+	<link href="plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet">
+	<link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- cssDevExtreme -->
+	<link href="css/devextreme/dx.common.css" rel="stylesheet">
+	<link href="css/devextreme/dx.light.css" rel="stylesheet">
+
+	<base href='/'>
+</head>
+
+<body ng-app="registrationModule">
+	<!-- Contenedor de información -->
+	<div id="st-container" ng-controller="searchController" ng-init="init()">
+		<!-- content push wrapper -->
+		<div class="st-pusher" ng-keyup="$event.keyCode == 13 ? Search() : null">
+			<nav class="st-menu st-effect-3" id="menu-3">
+				<h2 class="icon h2extends">
+					<span class="glyphicon glyphicon-search headSearch" aria-hidden="true"></span>
+					Nueva Búsqueda
+				</h2>
+				<ul>
+					<li>
+						<div class="labely">Proceso</div>
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="proceso.Proc_Nombre" readonly>
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="ClearProceso()">
+									<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+								</button>
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false">
+									<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li ng-repeat="proceso in listaProcesos" class="seleccionable"
+										ng-show="proceso.Proc_Id != 3">
+										<a ng-click="SetProceso(proceso)">{{ proceso.Proc_Nombre }}</a>
+									</li>
+								</ul>
+							</div><!-- /btn-group -->
+						</div><!-- /input-group -->
+					</li>
+					<li>
+						<div class="labely">Empresa</div>
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="empresa.nombre" readonly>
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="ClearEmpresa()"
+									ng-class="{ 'disabled': searchlevel < 2 }">
+									<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+								</button>
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"
+									ng-class="{ 'disabled': searchlevel < 2 }">
+									<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li ng-repeat="empresa in listaEmpresas" class="seleccionable">
+										<a ng-click="SetEmpresa(empresa)"> {{ empresa.nombre }}</a>
+									</li>
+								</ul>
+							</div><!-- /btn-group -->
+						</div><!-- /input-group -->
+					</li>
+					<li>
+						<div class="labely">Agencia</div>
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="agencia.nombre" readonly>
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="ClearAgencia()"
+									ng-class="{ 'disabled': searchlevel < 3 }">
+									<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+								</button>
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"
+									ng-class="{ 'disabled': searchlevel < 3 }">
+									<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<li ng-repeat="agencia in listaAgencias" class="seleccionable">
+										<a ng-click="SetAgencia(agencia)"> {{ agencia.nombre }}</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<span ng-show="allPermisosDocumentos.GenerarReportePeriodo == 1">
+						<li>
+							<div class="labely" href="#">Fecha Desde</div>
+							<div class="input-group">
+								<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt1"
+									is-open="opened1" min-date="minDate" datepicker-options="dateOptions"
+									date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open1($event)"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</div>
+						</li>
+						<li>
+							<div class="labely" href="#">Fecha Hasta</div>
+							<div class="input-group">
+								<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt2"
+									is-open="opened2" min-date="minDate" datepicker-options="dateOptions"
+									date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default" ng-click="open2($event)"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</div>
+						</li>
+					</span>
+					<!-- Cambio en filtro folio -->
+					<li>
+						<div class="labely" href="#">{{nombreBusqueda}}</div>
+						<div class="input-group">
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false">{{nombreBusqueda}}<span
+										class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a class="tipoBusqueda" ng-click="tipoBusqueda(1)">Orden de Compra</a></li>
+									<li ng-show="aplicaBusqueda"><a class="tipoBusqueda" ng-click="tipoBusqueda(2)">Factura</a></li>
+									<li><a class="tipoBusqueda" ng-click="tipoBusqueda(3)"
+											ng-show="departamento.idDepartamento == 2 || departamento.idDepartamento == 1 || departamento.idDepartamento == null || departamento.idDepartamento == undefined || departamento.idDepartamento == ''">
+											Número de Serie</a></li>
+									<!-- <li><a class="tipoBusqueda" ng-click="tipoBusqueda(4)" ng-show="departamento.nombreCorto == 'SE'">Orden
+											de Servicio</a></li> -->
+									<!-- <li><a class="tipoBusqueda" ng-click="tipoBusqueda(5)">Cliente</a></li> -->
+									<li ng-show="aplicaBusqueda"><a class="tipoBusqueda" ng-click="tipoBusqueda(6)">Cotización</a></li>
+								</ul>
+							</div>
+							<input type="text" class="form-control" ng-model="folioBusca"
+								ng-class="{ 'readonly': searchlevel != 1 }">
+						</div>
+					</li>
+					<!--  -->
+					<button type="button" class="btn btn-primary btnSearch" ng-click="Search()" id="btnBuscar"
+						data-loading-text="Buscando...">
+						<span class="glyphicon glyphicon-play " aria-hidden="true"></span>
+						Buscar
+					</button>
+					<button type="button" class="btn btn-default btnSearch" id="closeMenu">
+						<span class="glyphicon glyphicon-remove " aria-hidden="true"></span>
+						Cancelar
+					</button><br><br><br>
+				</ul>
+
+				<table class="table" cellspacing="0" width="80%">
+					<tbody>
+						<tr ng-show="allPermisosDocumentos.GenerarReportePeriodo == 1">
+							<td>
+								<button type="button" class="btn btn-success pull-right"
+									ng-click="matrizExcelGeneral()">
+									Reporte Documentos
+								</button>
+							</td>
+						</tr>
+						<tr ng-show="allPermisosDocumentos.ReporteGeneralGA == 1">
+							<td>
+								<button type="button" class="btn btn-success pull-right"
+									ng-click="matrizExcelGeneralGA()">
+									Reporte General GA
+								</button>
+							</td>
+						</tr>
+						<tr ng-show="allPermisosDocumentos.AdministraDocumentos == 1">
+							<td>
+								<button type="button" class="btn btn-success pull-right"
+									ng-click="goNuevoAdministrador()">
+									Administrar Documentos
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button type="button" class="btn btn-success pull-right"
+									ng-click="getDocumentosExcel()">
+									Excel Documentos
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</nav>
+
+			<div id="st-trigger-effects" class="column">
+				<nav class="navbar navbar-default navHeader" ng-style="estilo">
+					<!-- Inicia NAV bar -->
+					<div class="container-fluid">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+								data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+								<span class="sr-only">Navegador</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<button ng-show="busquedaVar" class="navbar-brand" id="slide" data-effect="st-effect-3">
+								<span class="glyphicon glyphicon-th blanco" id="menu" aria-hidden="true"></span>
+							</button>
+							<button ng-show="!busquedaVar" class="navbar-brand slideAdmin" data-effect="st-effect-3"
+								ng-click="goBusqueda()">
+								<span class="glyphicon glyphicon-th blanco" id="menu" aria-hidden="true"></span>
+							</button>
+							<a class="navbar-brand" href="#">
+								<span class="blanco">Expediente Digital Seminuevos <span ng-show="!busquedaVar"> |
+										Administrador</span>
+								</span></a>
+						</div>
+
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+							<ul class="nav navbar-nav">
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+								<li class="dropdown" id="mnuAvatar">
+									<a id="mnuUser" href="#" class="dropdown-toggle" data-toggle="dropdown"
+										role="button" aria-haspopup="true" aria-expanded="false" ng-style="estilo">
+										<span class="blanco">{{ empleado.nombre }}</span>
+										<img src="image/profile/man.jpg" id="avatar">
+										<i class="fa fa-user" aria-hidden="true"></i>
+										<span class="caret blanco" id="nombreEmpleado"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li class="seleccionable"><a ng-click="Salir()">Salir</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div><!-- /.container-fluid -->
+				</nav>
+				<div ng-view></div>
+			</div>
+		</div><!-- /st-pusher -->
+	</div><!-- /st-container -->
+
+	<!-- Usuario autenticado -->
+	<input type="hidden" id="lgnUser" value="[[ user.idUsuario ]]">
+	<input type="hidden" id="idProceso" value="[[ user.idProceso ]]">
+	<input type="hidden" id="idEmpresa" value="[[ user.idEmpresa ]]">
+	<input type="hidden" id="idSucursal" value="[[ user.idSucursal ]]">
+	<input type="hidden" id="vin" value="[[ user.vin ]]">
+
+	<script>
+		$(document).ready(function () {
+			$("#myButton").click(function () {
+				$('#myDiv').toggle('slide');
+
+			});
+
+			$(".vh").click(function () {
+				$('#myDiv').hide();
+
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		var nameDocument = '';
+		function refresh() {
+			var scope = angular.element($("#modalUpload")).scope();
+			scope.$apply(function () {
+				scope.FinishUpload(nameDocument);
+			})
+		}
+		function setName(name) {
+			nameDocument = name;
+		}
+		function getName() {
+			return nameDocument;
+		}
+
+		if ( window.history.replaceState ) {
+			window.history.replaceState( {}, null, window.location.href );
+		}
+	</script>
+
+	<div class="modal fade" id="mostrarPdf" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+		ng-controller="nodoController" aria-hidden="true">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="pci-cross pci-circle"></i>
+					</button>
+					<h4 class="modal-title">{{modalTitle}}</h4>
+				</div>
+				<div class="row" ng-show="!esUsuarioEnlace && estatusDocumentoViewer === 3" style="margin-left: 127px;">
+					<div class="col-md-10"
+						style="background: radial-gradient(red, black); text-align: center; border-radius: 10px;">
+						<label style="font-size: 20px; color: blanchedalmond;"> Razon del rechazo:
+							{{observacionesDocuentoViewer}} </label>
+					</div>
+				</div>
+				<div class="row" ng-show="esUsuarioEnlace && estatusDocumentoViewerEnlace === 3" style="margin-left: 127px;">
+					<div class="col-md-10"
+						style="background: radial-gradient(red, black); text-align: center; border-radius: 10px;">
+						<label style="font-size: 20px; color: blanchedalmond;"> Razon del rechazo:
+							{{observacionesDocuentoViewer}} </label>
+					</div>
+				</div>
+				<div class="modal-body" id="pdfReferenceContent"></div>
+				<div class="row" ng-show="!esUsuarioEnlace && estatusDocumentoViewer == 1">
+					<div class="col-md-12" ng-show="docUploadUsuario == 1">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-12">
+								<div class="col-md-4" style="text-align: center;" ng-show="allPermisosDocumentos.AprobarDocumentos == 1 && unidadFacturada == 0">
+									<label style="font-size: 20px;">Aprobar</label>
+									<button class="btn btn-circle-like" title="Aprobar Documento">
+										<i class="fa fa-thumbs-o-up" aria-hidden="true"
+											ng-click="aprobarRechazarDocumento(2)"></i>
+									</button>
+								</div>
+								<div class="col-md-4"></div>
+								<div class="col-md-4" style="text-align: center;" ng-show="allPermisosDocumentos.RechazarDocumentos == 1 && unidadFacturada == 0">
+									<label style="font-size: 20px;">Rechazar</label>
+									<button class="btn btn-circle-disLike" title="Rechazar Documento">
+										<i class="fa fa-thumbs-o-down" aria-hidden="true"
+											ng-click="openModalRechazar()"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<div class="row" ng-show="esUsuarioEnlace && estatusDocumentoViewerEnlace == 1 && docUploadUsuario == 1">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-12">
+								<div class="col-md-4" style="text-align: center;">
+									<label style="font-size: 20px;">Aprobar Enlace</label>
+									<button class="btn btn-circle-like" title="Aprobar Documento">
+										<i class="fa fa-thumbs-o-up" aria-hidden="true"
+											ng-click="aprobarRechazarDocumentoEnlace(2)"></i>
+									</button>
+								</div>
+								<div class="col-md-4"></div>
+								<div class="col-md-4" style="text-align: center;">
+									<label style="font-size: 20px;">Rechazar Enlace</label>
+									<button class="btn btn-circle-disLike" title="Rechazar Documento">
+										<i class="fa fa-thumbs-o-down" aria-hidden="true"
+											ng-click="openModalRechazar()"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="pdfMasUno" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+		ng-controller="nodoController" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<h4 class="modal-title">{{modalTitle}}</h4>
+				</div>
+				<div class="row" ng-show="!esUsuarioEnlace && estatusDocumentoViewer === 3" style="margin-left: 127px;">
+					<div class="col-md-10"
+						style="background: radial-gradient(red, black); text-align: center; border-radius: 10px;">
+						<label style="font-size: 20px; color: blanchedalmond;"> Razon del rechazo:
+							{{observacionesDocuentoViewer}} </label>
+					</div>
+				</div>
+				<div class="row" ng-show="esUsuarioEnlace && estatusDocumentoViewerEnlace === 3" style="margin-left: 127px;">
+					<div class="col-md-10"
+						style="background: radial-gradient(red, black); text-align: center; border-radius: 10px;">
+						<label style="font-size: 20px; color: blanchedalmond;"> Razon del rechazo:
+							{{observacionesDocuentoViewer}} </label>
+					</div>
+				</div>
+				<div class="modal-body" id="pdfReferenceContentVarios"></div>
+				<div class="row" ng-show="!esUsuarioEnlace && estatusDocumentoViewer == 1">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-12">
+								<div class="col-md-4" style="text-align: center;"
+									ng-show="allPermisosDocumentos.AprobarDocumentos == 1 && unidadFacturada == 0">
+									<label style="font-size: 20px;">Aprobar</label><br>
+									<button class="btn btn-circle-like" title="Aprobar Documento"
+										ng-click="aprobarRechazarDocumento(2)">
+										<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+									</button>
+								</div>
+								<div class="col-md-4"></div>
+								<div class="col-md-4" style="text-align: center;"
+									ng-show="allPermisosDocumentos.RechazarDocumentos == 1 && unidadFacturada == 0">
+									<label style="font-size: 20px;">Rechazar</label><br>
+									<button class="btn btn-circle-disLike" title="Rechazar Documento"
+										ng-clicK="openModalRechazar()">
+										<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<div class="row" ng-show="esUsuarioEnlace && estatusDocumentoViewerEnlace == 1">
+					<div class="col-md-12">
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-12">
+								<div class="col-md-4" style="text-align: center;">
+									<label style="font-size: 20px;">Aprobar Enlace</label>
+									<button class="btn btn-circle-like" title="Aprobar Documento">
+										<i class="fa fa-thumbs-o-up" aria-hidden="true"
+											ng-click="aprobarRechazarDocumentoEnlace(2)"></i>
+									</button>
+								</div>
+								<div class="col-md-4"></div>
+								<div class="col-md-4" style="text-align: center;">
+									<label style="font-size: 20px;">Rechazar Enlace</label>
+									<button class="btn btn-circle-disLike" title="Rechazar Documento">
+										<i class="fa fa-thumbs-o-down" aria-hidden="true"
+											ng-click="openModalRechazar()"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" ng-click="closeModalVariosImg();">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="rechazarDocumento" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<button type="button" class="close" data-dismiss="modal" style="color: white;">
+						<i class="pci-cross pci-circle text-white"></i>
+					</button>
+					<h4 class="modal-title text-white">Rechazar {{ modalTitle }}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row" style="padding: 12px;">
+						<h4 class="textClientes">¿Por que rechaza el documento?</h4>
+					</div>
+					<div class="row" style="padding: 12px;">
+						<textarea ng-model="razonesRechazo" formControlName="texto2"
+							style="resize: none;width: 100%;border: 1px solid #A0C9F7;" rows="3"></textarea>
+					</div>
+					<div class="row" style="margin-top: 10px; text-align: center;">
+						<div class=" col-md-12">
+							<button class="btn btn-danger" ng-click="cancelRechazo()">
+								Cancel
+							</button>
+							<button ng-show="!esUsuarioEnlace" class="btn btn-success" ng-click="aprobarRechazarDocumento(3)">
+								Rechazar
+							</button>
+							<button ng-show="esUsuarioEnlace" class="btn btn-success" ng-click="aprobarRechazarDocumentoEnlace(3)">
+								Rechazar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="uploadFiles" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">{{titleModal}}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-6">
+							<label style="font-size: 18px;"> Nombre del documento </label><br>
+							<input type="text" placeholder="NombreDelArchivo" ng-model="nombreArchivo" ng-disabled="true"
+								style="width: 200px; border-radius: 5px;">
+						</div>
+						<div class="col-md-2"></div>
+						<!-- <div class="col-md-6" ng-show="idDocumentoUpload === 9">
+							<label style="font-size: 18px;"> Tenencia 2021 </label><br>
+							<input type="checkbox" ng-model="tenenciaDosMilVeintiuno" ng-true-value="1" ng-false-value="0" ng-change="checkTenenciaDosMilVentiuno()">
+						</div> -->
+					</div>
+					<br><br>
+					<div class="row" style="text-align: center;">
+						<div class="col-md-12">
+							<label style="font-size: 18px;"> ¿Estas seguro de guardar el documento? </label><br>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 10px; text-align: center;">
+						<div class="col-md-12">
+							<button class="btn btn-danger" ng-click="cancelarSaveDoc();">Cancelar</button>
+							<button class="btn btn-success" ng-click="guardarDoc()">Continuar</button>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+					<button class="btn btn-success" ng-click="guardarDoc()">Continuar</button>
+				</div> -->
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="updateVariousFiles" role="dialog">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Documentos "{{titleDocumentosVarios}}"</h4>
+				</div>
+				<div class="modal-body">
+					<button class="btn btn-success pull-right" ng-click="nuevoVarios()"> <i class="fa fa-plus"
+							aria-hidden="true"></i> &nbsp; Nuevo Documento </button><br>
+					<br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Nombre</th>
+								<th></th>
+								<th>Estatus</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="varios in allDocumentsVarios">
+								<td>{{$index + 1}}</td>
+								<td>{{varios.nombreDocumento}}</td>
+								<td>
+									<button ng-show="allPermisosDocumentos.SubirSiempreDocumentos == 0" class="btn btn-info" ng-click="showRemplazarDocumentos(varios)"
+										ng-disabled="varios.id_estatus == 1 || varios.id_estatus == 2 ">
+										Remplazar documento
+									</button>
+									<button ng-show="allPermisosDocumentos.SubirSiempreDocumentos == 1" class="btn btn-info" ng-click="showRemplazarDocumentos(varios)">
+										Remplazar documento
+									</button>
+								</td>
+								<td>
+									<div
+										ng-class="{estatusAprobado: varios.id_estatus == 2, estatusEspera: varios.id_estatus == 1, estatusRechazado: varios.id_estatus == 3}">
+										<label>{{varios.est_descripcion}}</label>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div ng-show="remplazarDocumento">
+						<label style="font-size: 18px;"> Documento a remplazar</label><br>
+						<input type="text" placeholder="NombreDelArchivo" ng-model="nombreArchivoRemplaza"
+							ng-disabled="true" style="width: 200px; border-radius: 5px;">
+						<button class="btn btn-success pull-right"
+							ng-click="remplazarDocumentoVarios()">Continuar</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" ng-click="cancelarSaveDoc()">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="showVariousFiles" role="dialog">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Documentos "{{modalTitle}}"</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row" style="text-align: center;" ng-show="showViewAllTenencias">
+						<div class="col-md-12" >
+							<label ng-repeat="tenencia in allTenenciasObligatorias" ng-class="{teneciaUp: tenencia.ten_docCargado == 1, teneciaDown: tenencia.ten_docCargado == 0}">
+								{{tenencia.ten_anioTenencia}}
+							</label>
+						</div>
+					</div><br><br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Nombre</th>
+								<th>Ver</th>
+								<th>Estatus</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="variosVer in showAllDocumentsVarios">
+								<td>{{$index + 1}}</td>
+								<td>{{variosVer.nombreDocumento}}</td>
+								<td>
+									<button class="btn btn-info btn-circle-xs" ng-click="showImg(variosVer)">
+										<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+									</button>
+								</td>
+								<td>
+									<div ng-show="!esUsuarioEnlace"
+										ng-class="{estatusAprobado: variosVer.id_estatus == 2, estatusEspera: variosVer.id_estatus == 1, estatusRechazado: variosVer.id_estatus == 3}">
+										<label>{{variosVer.est_descripcion}}</label>
+									</div>
+									<div ng-show="esUsuarioEnlace"
+										ng-class="{estatusAprobado: variosVer.estatusEnlace == 2, estatusEspera: variosVer.estatusEnlace == 1, estatusRechazado: variosVer.estatusEnlace == 3, estatusEsperaGerente: variosVer.estatusEnlace == 0}">
+										<label>{{variosVer.descripcionEstatusEnlace}}</label>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div ng-show="remplazarDocumento">
+						<label> Documento a remplazar {{documentoRemplazarVarios}} </label><br>
+						<input type="text" placeholder="NombreDelArchivo" ng-model="nombreArchivoRemplaza">
+						<button class="btn btn-success pull-right"
+							ng-click="remplazarDocumentoVarios()">Continuar</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--================================ Modal para colocar los comentario bancarios ================================-->
+	<div class="modal fade" id="rechazarDocumento" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<button type="button" class="close" data-dismiss="modal" style="color: white;">
+						<i class="pci-cross pci-circle text-white"></i>
+					</button>
+					<h4 class="modal-title text-white">Rechazar {{ modalTitle }}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<h4 class="textClientes">¿Por que rechaza el documento?</h4>
+					</div>
+					<div class="row">
+						<textarea ng-model="razonesRechazo" formControlName="texto2"
+							style="resize: none;width: 100%;border: 1px solid #A0C9F7;" rows="3"></textarea>
+					</div>
+					<div class="row" style="margin-top: 10px; text-align: center;">
+						<div class=" col-md-12">
+							<button class="btn btn-danger" ng-click="cancelRechazoBancario()">
+								Cancel
+							</button>
+							<button class="btn btn-success" ng-click="sendRechazoBancario()">
+								Rechazar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- </div> -->
+
+	<div class="modal fade" id="watchInvoceModal" tabindex="-1" role="dialog" aria-labelledby="payInvoceModalLabel"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header fondoNav cabColor">
+					<button type="button" class="close" ng-click="closePDF();">
+						<span style="font-size: 20px;" aria-hidden="true">&times;</span>
+					</button>
+					<h2 class="modal-title" id="fileModalUpdateLabel">Factura {{invoce.serie}}{{invoce.folio}}</h2>
+				</div>
+				<div class="modal-body">
+					<div id="pdfInvoceContent">
+						<div ng-show="loadingOrder" class="sk-spinner sk-spinner-rotating-plane">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="masDeUnVin" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document" style="width: 90%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span>
+					</button>
+					<h3>Vines de {{tipoBusqueda}} - {{datoBusqueda}}</h3>
+				</div>
+				<div class="modal-body">
+					<div class="table-responsive">
+						<table class="table table-condensed table-hover">
+							<thead>
+								<tr>
+									<th>Vin</th>
+									<th>Auto</th>
+									<th>Marca</th>
+									<th>Año</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="vines in allVines">
+									<td> {{ vines.VEH_NUMSERIE }} </td>
+									<td> {{ vines.VEH_TIPOAUTO }} </td>
+									<td> {{ vines.VEH_SMARCA }} </td>
+									<td> {{ vines.VEH_ANMODELO }} </td>
+									<td> <button class="btn btn-info" ng-click="getDataByVin(vines.VEH_NUMSERIE)">
+											Consultar </button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="reporteExcelCXP" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document" style="width: 90%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<h5>{{titleReporte}}</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="pull-right">
+						<button class="btn btn-success" ng-click="export();"
+							ng-show="allPermisosDocumentos.DescargarExcelPeriodo == 1">
+							<span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Descargar Excel
+						</button>
+					</div><br><br>
+					<div ui-grid="matrizCXP" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="reporteExcelCXC" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document" style="width: 90%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<h5>{{titleReporte}}</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="pull-right">
+						<button class="btn btn-success" ng-click="export();"
+							ng-show="allPermisosDocumentos.DescargarExcelPeriodo == 1">
+							<span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Descargar Excel
+						</button>
+					</div><br><br>
+					<div ui-grid="matrizCXC" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="carouselUnidad" role="dialog">
+		<div class="modal-dialog modal-lg" role="document" style="width: 50%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span>
+					</button>
+					Auto: {{dataAutomovil.VEH_TIPOAUTO}} - Vin: {{dataAutomovil.VEH_NUMSERIE}}
+				</div>
+				<div class="modal-body" style="overflow: auto;">
+					<div class="col-md-12">
+						<div class="col-md-1">
+							<div ng-click="atras()" class="pull-left atrasBtn">
+								<span class="glyphicon glyphicon-chevron-left">&nbsp;</span>
+							</div>
+						</div>
+						<div class="col-md-10">
+							&nbsp;
+						</div>
+						<div class="col-md-1">
+							<div ng-click="siguiente()" class="pull-right sigBtn">
+								<span class="glyphicon glyphicon-chevron-right">&nbsp;</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div id="myCarousel" class="carousel slide" style="height: 660px;">
+							<div class="carousel-inner aaaa" style="height: 660px;">
+								<div id="it{{$index}}" class="item " style="height: 650px;" ng-repeat="slide in slides">
+									<img src="{{slide.image}}" alt="Unidad{{$index}}"
+										style="max-height: 650px;margin: auto;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="wsVariousFiles" role="dialog">
+		<div class="modal-dialog" style="width: 45%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Documentos</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Documento</th>
+								<th>Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="varios in allDocumentsWS">
+								<td>{{$index + 1}}</td>
+								<td>{{varios.folioOrden}}</td>
+								<td style="text-align: center;">
+									<button class="btn btn-success btn-circle" ng-click="verPdfWs(varios)"
+										title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="wsFacturasFiles" role="dialog">
+		<div class="modal-dialog" style="width: 45%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Documentos</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Documento</th>
+								<th>Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="varios in allDocumentsWS">
+								<td>{{$index + 1}}</td>
+								<td>{{varios.docto}}</td>
+								<td style="text-align: center;">
+									<button class="btn btn-success btn-circle" ng-click="verPdfWs(varios)"
+										title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="reporteDocumentos" role="dialog">
+		<div class="modal-dialog" style="width: 90%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Reporte Documentos</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row nav nav-pills nav-stacked" style="margin-bottom: 18px;">
+						<div class="col-sm-4"></div>
+						<div class="col-sm-2"
+							style="text-align: center; border-top-left-radius: 100px; border-bottom-left-radius: 100px;"
+							ng-click="setTab(1)"
+							ng-class="{ active: tabDocumentosFaltantes == 1, noActive: tabDocumentosFaltantes == 2 }">
+							<a
+								ng-class="{ textoActivo: tabDocumentosFaltantes == 1, textoNoActivo: tabDocumentosFaltantes == 2 }">CXP</a>
+						</div>
+						<div class="col-sm-2"
+							style="text-align: center; border-top-right-radius: 100px; border-bottom-right-radius: 100px;"
+							ng-click="setTab(2)"
+							ng-class="{ active: tabDocumentosFaltantes == 2, noActive: tabDocumentosFaltantes == 1}">
+							<a
+								ng-class="{ textoActivo: tabDocumentosFaltantes == 2, textoNoActivo: tabDocumentosFaltantes == 1 }">CXC</a>
+						</div>
+					</div>
+					<div ng-show='cargandoDocsFaltantes && docsFaltantesCargados'>
+						<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Documento</th>
+									<th>Tipo Documento</th>
+									<th>Proceso</th>
+									<th>Estatus</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="reporte in reporteDocumentos">
+									<td>{{$index + 1}}</td>
+									<td>{{reporte.doc_nombre}}</td>
+									<td>{{reporte.tipo_documento}}</td>
+									<td>{{reporte.proceso}}</td>
+									<td
+										ng-class='{estatusAprobado: reporte.estatus == "Documento Cargado", estatusRechazado: reporte.estatus == "Documento Faltante"}'>
+										{{reporte.estatus}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div ng-show='cargandoDocsFaltantes && !docsFaltantesCargados && !esUsuarioEnlace'
+						style="text-align: center; font-size: 30px;">
+						<label> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Documentos no disponibles
+							por el momento.</label>
+					</div>
+					<div ng-show='cargandoDocsFaltantes && !docsFaltantesCargados && esUsuarioEnlace'
+						style="text-align: center; font-size: 30px;">
+						<label> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Accion no disponible para el enlace.</label>
+					</div>
+					<div ng-show='!cargandoDocsFaltantes' style="text-align: center; font-size: 30px;">
+						<label>Cargando...</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="loadModalCXC" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="cargandoCXP">
+				<div class="loader_CompletoCXP"></div>
+			</div>
+		</div>
+	</div>
+
+	<div id="confirmSave" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp; ATENCION
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<label style="font-size: 20px;">¿Estas seguro de la configuración que quieres guardar para
+								el documento "{{nombreDocGuardar}}"?</label>
+						</div>
+						<div class="col-md-1"></div>
+					</div><br>
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-6">
+								<button class="btn btn-success" ng-click="confirmConfiguracion()">
+									Guardar
+								</button>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-danger" ng-click="dismissConfiguracion()">
+									Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="newDocument" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp; Nuevo Documento
+						"{{tipoCanal}}"</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-row">
+								<div class="col-md-6">
+									<div class="labely">Nombre del documento</div>
+									<input type="text" class="form-control" ng-model="nameNewDocument">
+								</div>
+								<div class="col-md-2">
+									<div class="labely">Varios documentos</div>
+									<input type="checkbox" ng-model="acceptDocumentosVarios" ng-true-value="1"
+										ng-false-value="0">
+								</div>
+								<div class="col-md-4">
+									<!-- <div class="labely">Varios documentos</div>
+									<input type="checkbox" ng-model="acceptDocumentosVarios" ng-true-value="1" ng-false-value="0"> -->
+
+									<div class="labely" href="#">Fecha de inicio</div>
+									<div class="input-group">
+										<input type="text" class="form-control" datepicker-popup="{{formatNew}}"
+											ng-model="dtNew" is-open="openedNew" min-date="minDateNew"
+											datepicker-options="dateOptionsNew" date-disabled="disabled(date, mode)"
+											ng-required="true" close-text="Close" readonly/>
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-default" ng-click="openNew($event)">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+									</div>
+								</div>
+							</div>
+							<br><br><br><br>
+							<hr><br>
+							<div class="col-row">
+								<div class="col-md-12">
+									<ul>
+										<li ng-repeat="compVent in compraVentaNewDocument">
+											<label>Configuración {{compVent.descripcionCanal}}</label>
+											<div class="col-md-12">
+												<table class="table table-striped table-bordered" cellspacing="0"
+													width="100%">
+													<thead>
+														<tr>
+															<th>Documento Activo</th>
+															<th>Opcional</th>
+															<th>Persona Moral</th>
+															<th>Persona Fisica</th>
+															<th>Persona Fisica Actividad Empresarial</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																<input type="checkbox" ng-model="compVent.doc_activo"
+																	ng-true-value="1" ng-false-value="0">
+															</td>
+															<td>
+																<input type="checkbox" ng-model="compVent.doc_opcional"
+																	ng-true-value="1" ng-false-value="0">
+															</td>
+															<td>
+																<input type="checkbox" ng-model="compVent.doc_moral"
+																	ng-true-value="1" ng-false-value="0">
+															</td>
+															<td>
+																<input type="checkbox" ng-model="compVent.doc_fisica"
+																	ng-true-value="1" ng-false-value="0">
+															</td>
+															<td>
+																<input type="checkbox" ng-model="compVent.doc_fisicaAE"
+																	ng-true-value="1" ng-false-value="0">
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div><br>
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-6">
+								<button class="btn btn-success" ng-click="saveAddNewDocument(1)">
+									Guardar
+								</button>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-danger" ng-click="dismissAddNewDocument()">
+									Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="confirmNewDocument" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp; ATENCION
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<label style="font-size: 20px;">¿Estas seguro de guardar el documento
+								{{nameNewDocument}}?</label>
+						</div>
+						<div class="col-md-1"></div>
+					</div><br>
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-4">
+								<button class="btn btn-success" ng-click="saveAddNewDocument(2)">
+									Guardar
+								</button>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-danger" ng-click="dismissConfirmNewDocument()">
+									Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="modalTenencias" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width: 60%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp; Carga de tenencia
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<div class="row" style="text-align: center;">
+								<div class="col-md-12" >
+									<label style="font-size: 15px;"> Tenencias obligatorias cargadas </label>
+								</div>
+							</div>
+							<div class="row" style="text-align: center;">
+								<div class="col-md-12" >
+									<label ng-repeat="tenencia in allTenenciasObligatorias" ng-class="{teneciaUp: tenencia.ten_docCargado == 1, teneciaDown: tenencia.ten_docCargado == 0}">
+										{{tenencia.ten_anioTenencia}}
+									</label>
+								</div>
+							</div>
+							<div ng-show="!docGubernamental">
+								<dvi class="row">
+									<div class="col-md-12" style="text-align: center;">
+										<label style="font-size: 20px;">Selecciona el año de la tenencia que deseas cargar.</label>
+									</div>
+								</dvi>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<div class="labely">Nombre del archivo</div>
+											<input type="text" placeholder="NombreDelArchivo" ng-model="nombreArchivo" ng-disabled="true"
+											style="width: 200px; border-radius: 5px;">
+										</div>
+										<div class="col-md-6">
+											<div class="labely">Año</div>
+											<div class="input-group">
+												<input type="text" class="form-control" ng-model="yearSelect"readonly>
+												<div class="input-group-btn">
+													<button type="button" class="btn btn-default" ng-click="ClearYear()">
+														<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+													</button>
+													<button ng-disabled="false" type="button"
+														class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+														aria-haspopup="true" aria-expanded="false">
+														<span class="glyphicon glyphicon-menu-down"
+															aria-hidden="true"></span>
+													</button>
+													<ul class="dropdown-menu dropdown-menu-right">
+														<li ng-repeat="yearTen in allYearsTenencias" class="seleccionable">
+															<a ng-click="SetYearTenencia(yearTen)">{{ yearTen.anio }}</a>
+														</li>
+													</ul>
+												</div><!-- /btn-group -->
+											</div><!-- /input-group -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div ng-show="docGubernamental">
+								<dvi class="row">
+									<div class="col-md-12" style="text-align: center;">
+										<label style="font-size: 20px;">Selecciona las tenencias que ampara el documento</label>
+									</div>
+								</dvi>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<div class="labely">Nombre del archivo</div>
+											<input type="text" placeholder="NombreDelArchivo" ng-model="nombreArchivo" ng-disabled="true"
+											style="width: 200px; border-radius: 5px;">
+										</div>
+										<div class="col-md-6">
+											<div class="col-sm-2" ng-repeat="tenencia in checksYears">
+												<label> {{tenencia.anio}}  </label>
+												<input type="checkbox" ng-model="tenencia.checkValue" ng-true-value="true" ng-false-value="false">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br><br>
+							<div class="row">
+								<div class="col-md-4">
+									<label class="labely">Documento gubernamental</label>
+									<input type="checkbox" ng-change="checkGubernamental()" ng-model="docGubernamental" ng-true-value="true" ng-false-value="false">
+								</div>
+								<div class="col-md-4"></div>
+								<div class="col-md-4">
+									<div class="col-md-6" style="margin-left: -103px;">
+										<button class="btn btn-success" ng-click="saveNewTenencia()">
+											Guardar
+										</button>
+									</div>
+									<div class="col-md-6">
+										<button class="btn btn-danger" ng-click="dismissTenencias()">
+											Cancelar
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1"></div>
+					</div><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="updConfiguracionSave" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp; Edita los datos que necesitas
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-5">
+							<div class="labely" href="#">Nombre documento</div>
+							<input type="text" class="form-control" ng-model="nameUpdateConfSave">
+						</div>
+						<div class="col-md-2">
+							<div class="labely">Varios documentos</div>
+								<input type="checkbox" ng-model="updAcceptDocumentosVarios" ng-true-value="1"
+									ng-false-value="0">
+						</div>
+						<div class="col-md-5">
+							<div class="labely" href="#">Fecha de inicio</div>
+								<div class="input-group">
+									<input type="text" class="form-control" datepicker-popup="{{formatNew}}"
+										ng-model="dtNew" is-open="openedNew" min-date="minDateNew"
+										datepicker-options="dateOptionsNew" date-disabled="disabled(date, mode)"
+										ng-required="true" close-text="Close" readonly/>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="openNew($event)">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+								</div>
+						</div>
+					</div><br>
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4"></div>
+						<div class="col-md-4">
+							<div class="col-md-6">
+								<button class="btn btn-success" ng-click="updConfigSave()">
+									Actualizar
+								</button>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-danger" ng-click="dismissUpdConfiguracionSave()">
+									Cancelar
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="excelDocumentos" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Selecciona los parametros para descargar el excel</h4>
+				</div>
+				<div class="modal-body">
+					<div ng-show="!cargandoXls">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3">
+									<div class="labely">Proceso</div>
+									<div class="input-group">
+										<input type="text" class="form-control" ng-model="procesoXls.Proc_Nombre" readonly>
+										<div class="input-group-btn">
+											<!-- <button type="button" class="btn btn-default" ng-click="ClearProceso()">
+													<span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+												</button> -->
+											<button ng-disabled="false" type="button"
+												class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right">
+												<li ng-repeat="proceso in listaProcesosXls" class="seleccionable"
+													ng-show="proceso.Proc_Id != 3">
+													<a ng-click="SetProcesoXls(proceso)">{{ proceso.Proc_Nombre }}</a>
+												</li>
+											</ul>
+										</div><!-- /btn-group -->
+									</div><!-- /input-group -->
+								</div>
+								<div class="col-md-3" ng-show="showCanalesXls">
+									<div class="labely">{{tipoCanal}}</div>
+									<div class="input-group">
+										<input type="text" class="form-control" ng-model="canalesXls.descripcionCanal"
+											readonly>
+										<div class="input-group-btn">
+											<button ng-disabled="false" type="button"
+												class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right">
+												<li ng-repeat="canales in listaCanalesXls" class="seleccionable"
+													ng-show="proceso.Proc_Id != 3">
+													<a ng-click="setCanalesXls(canales)">{{ canales.descripcionCanal }}</a>
+												</li>
+											</ul>
+										</div><!-- /btn-group -->
+									</div><!-- /input-group -->
+								</div>
+								
+								<div class="col-md-3" ng-show="showtipoPersonasXls">
+									<div class="labely">Tipo Persona</div>
+									<div class="input-group">
+										<input type="text" class="form-control" ng-model="tipoPersonaXls.tipo_persona" readonly>
+										<div class="input-group-btn">
+											<button ng-disabled="false" type="button"
+												class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right">
+												<li ng-repeat="persona in listaPersonasXls" class="seleccionable">
+													<a ng-click="SetPersonaXls(persona)">{{ persona.tipo_persona }}</a>
+												</li>
+											</ul>
+										</div><!-- /btn-group -->
+									</div><!-- /input-group -->
+								</div>
+	
+								<div class="col-md-3" ng-show="estadoRepublicaXls">
+									<div class="labely">Estado de la republica</div>
+									<div class="input-group">
+										<input type="text" class="form-control" ng-model="estadosXls.estado" readonly>
+										<div class="input-group-btn">
+											<button ng-disabled="false" type="button"
+												class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+												aria-haspopup="true" aria-expanded="false">
+												<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+											</button>
+											<ul id="myDropdownXls" class="dropdown-menu dropdown-menu-right scrollable-menu"
+												style="width: 280px;">
+												<div
+													style="background-color: white; height: 46px; position: fixed; width: 261px;">
+													<input type="text" placeholder="Buscar.." id="myInputXls"
+														autocomplete="off" ng-keyup="filterFunctionXls()"
+														style="width: 245px; margin: 5px; border-radius: 10px; position:fixed">
+												</div>
+												<br> <br>
+												<li ng-repeat="estados in listaEstadosXls" class="seleccionable">
+													<a ng-click="setEstadosXls(estados)">{{ estados.estado }}</a>
+												</li>
+											</ul>
+										</div><!-- /btn-group -->
+									</div><!-- /input-group -->
+								</div>
+							</div>
+						</div><br>
+						<div class="row">
+							<div class="col-md-4"></div>
+							<div class="col-md-4"></div>
+							<div class="col-md-4">
+								<div class="col-md-6">
+									<button class="btn btn-success" ng-click="downloadDocumentos()">
+										Descargar Excel
+									</button>
+								</div>
+								<div class="col-md-6">
+									<button class="btn btn-danger" ng-click="dismissExcelDocumentos()">
+										Cerrar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-show="cargandoXls" style="height: 50px;">
+						<div class="modal-dialog">
+							<div class="cargandoCXP">
+								<div class="loader_CompletoCXP" style="margin-top: -34px; border-top: 16px solid #363636; border-bottom: 16px solid #363636; border-left: 16px solid rgb(7, 5, 5); border-right: 16px solid rgb(7, 5, 5);"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="wsVariousFilesFacturas" role="dialog">
+		<div class="modal-dialog" style="width: 45%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Documentos</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Documento</th>
+								<th>Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="varios in allFacturasAcc">
+								<td>{{$index + 1}}</td>
+								<td>{{varios.factura}}</td>
+								<td style="text-align: center;">
+									<button class="btn btn-success btn-circle" ng-click="verPdfWsFacturas(varios)"
+										title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="mostrarPdfFacturas" role="dialog">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="pci-cross pci-circle"></i>
+					</button>
+					<h4 class="modal-title">{{titleModalFacturas}}</h4>
+				</div>
+				<div class="modal-body" id="pdfReferenceContentFacturas"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" ng-click="closeModalFacturas()">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="mostrarGuia" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal"
+		ng-controller="nodoController" aria-hidden="true">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header label-mint headerModal cabColor">
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="pci-cross pci-circle"></i>
+					</button>
+					<h4 class="modal-title">{{modalTitleGuia}}</h4>
+				</div>
+				<div class="modal-body" id="pdfReferenceContentGuia"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="allComprobantes" role="dialog">
+		<div class="modal-dialog" style="width: 45%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Comprobantes</h4>
+				</div>
+				<div class="modal-body">
+					<br>
+					<table class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Documento</th>
+								<th>Ver</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="comprobante in dataComprobantes">
+								<td>{{$index + 1}}</td>
+								<td>{{comprobante.nombre}}</td>
+								<td style="text-align: center;">
+									<button class="btn btn-success btn-circle" ng-click="verPdfComprobante(comprobante)" title="Ver Documento">
+										<i class="fa fa-eye" aria-hidden="true"></i>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="showComprobante" role="dialog">
+		<div class="modal-dialog" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header cabColor">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title"> Comprobante </h4>
+				</div>
+				<div class="modal-body" id="pdfReferenceContentComprobante"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" aria-label="Close" ng-click="dimissComprobante()">Salir</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="js/toastr.min.js"></script>
+
+	<!-- Librerias Angular-->
+	<script src="js/angular.min.js"></script>
+	<script src="js/angular-animate.min.js"></script>
+	<script src="js/angular-route.min.js"></script>
+	<script src="js/angular-ui/ui-bootstrap-tpls.min.js"></script>
+	<script src="js/angular-local-storage.min.js"></script>
+
+	<!--Funciones Comunes-->
+	<script src="confront.js"></script>
+
+	<!--Angular NG-Grid-->
+	<script src="js/ng-grid.js"></script>
+	<script src="js/ui-grid.js"></script>
+	<link rel="stylesheet" href="css/ui-grid.css" type="text/css">
+	<!--Angular Busy-->
+	<script src="js/angular-busy.js"></script>
+
+	<!--Librería para realizar querys-->
+	<script src="js/linq.js"></script>
+
+	<!--Librerias de aplicación angular-->
+	<script src="AngularJS/RegistrationModule.js"></script>
+
+	<!--librerias de componenetes-->
+	<script src="AngularJS/alertFactory.js"></script>
+	<script src="AngularJS/globalFactory.js"></script>
+
+	<!-- LMS Agregado Libreria Utils -->
+	<script src="AngularJS/utils.js"></script>
+
+	<!--Quitar-->
+	<script src="helpers.js"></script>
+	<!--Directivas -->
+	<script src="AngularJS/directive.js"></script>
+	<!--Controllers-->
+	<script src="AngularJS/Empleado/empleadoRepository.js"></script>
+	<script src="AngularJS/Alerta/alertaRepository.js"></script>
+	<script src="AngularJS/Documento/documentoRepository.js"></script>
+	<script src="AngularJS/Documento/documentoController.js"></script>
+	<script src="AngularJS/Nodo/nodoRepository.js"></script>
+	<script src="AngularJS/Nodo/nodoController.js"></script>
+	<script src="AngularJS/Search/searchRepository.js"></script>
+	<script src="AngularJS/Search/searchController.js"></script>
+	<script src="AngularJS/administrador/administradorController.js"></script>
+	<script src="AngularJS/administrador/administradorRepository.js"></script>
+
+	<!--LQMA add funciones common-->
+	<script src="common.js"></script>
+	<!--Sidebars-->
+	<script src="js/sidebar/classie.js"></script>
+	<script src="js/sidebar/sidebarEffects.js"></script>
+	<!--Responsive table-->
+	<script src="js/datatables/datatables.min.js"></script>
+	<script src="plugins/datatables/media/js/jquery.dataTables.js"></script>
+	<script src="plugins/datatables/media/js/dataTables.bootstrap.js"></script>
+	<script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="js/datatables/tables-datatables.js"></script>
+	<script src="AngularJS/directiveFile/directiveFile.js"></script>
+	<!-- devExtreme -->
+	<script src="https://cdn3.devexpress.com/jslib/18.1.6/js/dx.all.js"></script>
+
+	<script src="js/angularjs-dropdown-multiselect.js"></script>
+
+</body>
+
+</html>

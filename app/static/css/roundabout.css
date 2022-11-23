@@ -1,0 +1,51 @@
+#navigator ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 42em;
+    height: 17em;
+}
+#navigator li {
+    height: 20em;
+    width: 30em;
+    background-color: rgba(228, 230, 234, 0.79);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: .5px .5px 1px #ADAEB1;
+}
+
+#navigator li.roundabout-in-focus {
+    cursor: default;
+    background-color: rgb(116, 161, 200);
+    border: 0.5px solid aqua;    
+}
+
+#navigator li.roundabout-moveable-item {
+    cursor: pointer;
+}
+
+#navigator li.roundabout-moveable-item h4{
+    display: none;
+}
+
+#navigator li.roundabout-in-focus h4{
+    display: block;
+}
+
+#navigator li.roundabout-moveable-item h5{
+    display: none;
+}
+
+#navigator li.roundabout-in-focus h5{
+    display: block;
+}
+
+#navigator li span {
+    display: block;
+    padding-top: 9em;
+}
+
+#carbonads-container .carbonad {
+    margin: 0 auto;
+}

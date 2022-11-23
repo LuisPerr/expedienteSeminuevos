@@ -1,0 +1,156 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Intelimotors",
+        "description": "",
+        "version": "1.0"
+    },
+    "produces": ["application/json"],
+    "basePath": ["/api/apiDocumentos/"],
+    "paths": {
+        "/apiKey": {
+            "post": {
+                "x-swagger-router-controller": "home",
+                "operationId": "index",
+                "tags": ["/token"],
+                "description": "Consumo del token",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/saveDocumento": {
+            "post": {
+                "x-swagger-router-controller": "home",
+                "operationId": "index",
+                "tags": ["/Guardar Documentos"],
+                "description": "Guarda el documento",
+                "parameters": [
+                    {
+                        "name": "secret_key",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "vinAuto",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "pdf",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "unidadNegocio",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/deleteDocumento": {
+            "get": {
+                "x-swagger-router-controller": "home",
+                "operationId": "index",
+                "tags": ["/Eliminar Documentos"],
+                "description": "Elimina el documento (Solo éxiste para pruebas)",
+                "parameters": [
+                    {
+                        "name": "secret_key",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "vinAuto",
+                        "in": "query",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/idExpediente": {
+            "get": {
+                "x-swagger-router-controller": "home",
+                "operationId": "index",
+                "tags": ["/Obetner id expedient"],
+                "description": "Regresa el id del expedinte con un vin",
+                "parameters": [
+                    {
+                        "name": "secret_key",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "vinAuto",
+                        "in": "query",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        }
+    }
+}

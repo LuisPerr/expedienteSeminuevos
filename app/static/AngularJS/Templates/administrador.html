@@ -1,0 +1,394 @@
+<link href="../../css/nodo.css" rel="stylesheet" />
+<div cg-busy="myPromise" ng-init="init()" resize>
+    <div class="row nav nav-pills nav-stacked" style="margin-bottom: 18px;">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-2"
+            style="text-align: center; border-top-left-radius: 100px; border-bottom-left-radius: 100px;"
+            ng-click="setTab(1)"
+            ng-class="{ active: tabDocumentosFaltantes == 1, noActive: tabDocumentosFaltantes == 2 }">
+            <a ng-class="{ textoActivo: tabDocumentosFaltantes == 1, textoNoActivo: tabDocumentosFaltantes == 2 }">Singular</a>
+        </div>
+        <div class="col-sm-2"
+            style="text-align: center; border-top-right-radius: 100px; border-bottom-right-radius: 100px;"
+            ng-click="setTab(2)"
+            ng-class="{ active: tabDocumentosFaltantes == 2, noActive: tabDocumentosFaltantes == 1}">
+            <a ng-class="{ textoActivo: tabDocumentosFaltantes == 2, textoNoActivo: tabDocumentosFaltantes == 1 }">Grupal</a>
+        </div>
+    </div>
+    <div ng-show="!UpdMasivo">
+        <div class="col-row">
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="labely">Proceso</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="procesoAdmin.Proc_Nombre" readonly>
+                        <div class="input-group-btn">
+                            <!-- <button type="button" class="btn btn-default" ng-click="ClearProceso()">
+                                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+                            </button> -->
+                            <button ng-disabled="false" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li ng-repeat="proceso in listaProcesos" class="seleccionable"
+                                    ng-show="proceso.Proc_Id != 3">
+                                    <a ng-click="SetProcesoAdmin(proceso)">{{ proceso.Proc_Nombre }}</a>
+                                </li>
+                            </ul>
+                        </div><!-- /btn-group -->
+                    </div><!-- /input-group -->
+                </div>
+                <div class="col-md-3">
+                    <div ng-show="canalVentaCompra" class="labely">{{tipoCanal}}</div>
+                    <div ng-show="canalVentaCompra" class="input-group">
+                        <input type="text" class="form-control" ng-model="canalesAdmin.descripcionCanal" readonly>
+                        <div class="input-group-btn">
+                            <button ng-disabled="false" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li ng-repeat="canales in listaCanales" class="seleccionable"
+                                    ng-show="proceso.Proc_Id != 3">
+                                    <a ng-click="setCanales(canales)">{{ canales.descripcionCanal }}</a>
+                                </li>
+                            </ul>
+                        </div><!-- /btn-group -->
+                    </div><!-- /input-group -->
+                </div>
+    
+                <div class="col-md-3">
+                    <div ng-show="estadoRepublica" class="labely">Estado de la republica</div>
+                    <div ng-show="estadoRepublica" class="input-group">
+                        <input type="text" class="form-control" ng-model="estadosAdmin.estado" readonly>
+                        <div class="input-group-btn">
+                            <button ng-disabled="false" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            </button>
+                            <ul id="myDropdown" class="dropdown-menu dropdown-menu-right scrollable-menu"
+                                style="width: 280px;">
+                                <div style="background-color: white; height: 46px; position: fixed; width: 261px;">
+                                    <input type="text" placeholder="Buscar.." id="myInput" autocomplete="off"
+                                        ng-keyup="filterFunction()"
+                                        style="width: 245px; margin: 5px; border-radius: 10px; position:fixed">
+                                </div>
+                                <br> <br>
+                                <li ng-repeat="estados in listaEstados" class="seleccionable">
+                                    <a ng-click="setEstados(estados)">{{ estados.estado }}</a>
+                                </li>
+                            </ul>
+                        </div><!-- /btn-group -->
+                    </div><!-- /input-group -->
+                </div>
+                <div class="col-md-3">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <button class="btn btn-info" style="margin-top: 24px;" ng-click="buscarCrud()">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true" font-size="25px"> </span>
+                                <span font-size="25px"> Buscar </span>
+                            </button>
+                        </div>
+                        <div class="col-md-6" ng-show="addNewDocumento">
+                            <button class="btn btn-success" style="margin-top: 24px;" ng-click="newDocument()">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                <span font-size="25px"> Nuevo Documento </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <br><br><br>
+        <div class="row" ng-show="showDataCrud">
+            <div class="col-md-3" style="left: 30px;">
+                <div class="labely" href="#">Fecha de inicio</div>
+                <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt1" is-open="opened1"
+                        min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"
+                        ng-required="true" close-text="Close" readonly/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open1($event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+        </div>
+    
+        <div style="margin-top: 60px;" class="col-row">
+            <div class="col-md-12" ng-show="showDataCrud">
+                <table id="tablaAdmin" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Documento Activo</th>
+                            <th>Opcional</th>
+                            <th>Persona Moral</th>
+                            <th>Persona Fisica</th>
+                            <th>Persona Fisica Act. Emp.</th>
+                            <th>Varios documentos</th>
+                            <th>Estatus</th>
+                            <th>Guardar</th>
+                            <th> Configuracion programada </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="documento in listaCrud">
+                            <td>
+                                <label>{{documento.doc_nombre}}</label>
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="documento.doc_activo" ng-true-value="1" ng-false-value="0"
+                                 ng-click="activoInactivo(documento)" >
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="documento.doc_opcional" ng-true-value="1"ng-false-value="0" >
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="documento.doc_moral" ng-true-value="1" ng-false-value="0">
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="documento.doc_fisica" ng-true-value="1" ng-false-value="0">
+                            </td>
+                            <td>
+                                <input type="checkbox" ng-model="documento.doc_fisicaAE" ng-true-value="1" ng-false-value="0">
+                            </td>
+                            <td>
+                                <input ng-show="documento.conSav_fechaInicio === null" type="checkbox" ng-model="documento.doc_varios" ng-true-value="1" ng-false-value="0">
+                            </td>
+                            <td
+                                ng-class="{ activoObligatorio: documento.estatus == 'Activo obligatorio', activoOpcional: documento.estatus == 'Activo opcional', inactivo: documento.estatus == 'Inactivo'}">
+                                <label>{{documento.estatus}}</label>
+                            </td>
+                            <td>
+                                <div ng-show="documento.conSav_fechaInicio === null">
+                                    <button  ng-show="documento.conUp_fechaInicio === null" class="btn btn-success" ng-click="saveConfiguracion(documento)" data-toggle="tooltip" data-placement="top"  title="Guarda la configuración">
+                                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    </button>
+                                    <button  ng-show="documento.conUp_fechaInicio !== null" class="btn btn-info" ng-click="saveConfiguracion(documento)" data-toggle="tooltip" data-placement="top"  title="Actualiza la configuración">
+                                        <i class="fa fa-retweet" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div ng-show="documento.conSav_fechaInicio !== null">
+                                    <button  ng-show="documento.conUp_fechaInicio === null" class="btn btn-warning" ng-click="updConfSave(documento)" data-toggle="tooltip" data-placement="top"  title="Actualiza la configuración del nuevo documento">
+                                        <i class="fa fa-retweet" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <label ng-show="documento.conUp_fechaInicio !== null && documento.conSav_fechaInicio === null">
+                                    Configuración programada para "{{documento.conUp_fechaInicio}}"<br>
+                                    <button class="btn btn-danger" ng-click="deleteConfiguracionPrevia(documento)" data-toggle="tooltip" data-placement="top"  title="Elimina la configuracion por aplicar">
+                                        <i class="fa fa-minus-square" aria-hidden="true"></i>
+                                    </button>
+                                </label> 
+                                <label ng-show="documento.conUp_fechaInicio === null && documento.conSav_fechaInicio === null">
+                                    Sin configuración por aplicar
+                                </label> 
+                                <label ng-show="documento.conUp_fechaInicio === null && documento.conSav_fechaInicio !== null">
+                                    Documento nuevo por aplicar el "{{documento.conSav_fechaInicio}}"<br>
+                                    <button class="btn btn-danger" ng-click="deleteDocumentoPrevio(documento)" data-toggle="tooltip" data-placement="top"  title="Elimina el documento por aplicar">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
+                                </label> 
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div ng-show="UpdMasivo">
+        <div class="col-row">
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="labely">Proceso</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="procesoAdminMasivo.Proc_Nombre" readonly>
+                        <div class="input-group-btn">
+                            <button ng-disabled="false" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li ng-repeat="proceso in listaProcesosMasivo" class="seleccionable"
+                                    ng-show="proceso.Proc_Id != 3">
+                                    <a ng-click="SetProcesoAdminMasivo(proceso)">{{ proceso.Proc_Nombre }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" ng-show="canalesMaisvo">
+                    <div class="labely">Canales</div>
+                    <div class="input-group-btn" ng-dropdown-multiselect="" options="dataCanales" selected-model="modelCanales" extra-settings="searchSelectAllSettings"></div>
+                </div>
+                <div class="col-md-3" ng-show="canalesMaisvo && procesoAdminMasivo.Proc_Id == 1">
+                    <div class="labely">Estado de la republica</div>
+                    <div class="input-group-btn" ng-dropdown-multiselect="" options="dataEstados" selected-model="modelEstados" extra-settings="searchSelectAllSettings"></div>
+                </div>
+                <div class="col-md-3" ng-show="canalesMaisvo">
+                    <div class="labely" href="#">Fecha de inicio</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dtM1" is-open="openedM1"
+                            min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"
+                            ng-required="true" close-text="Close" readonly/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openM1($event)">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div style="margin-top: 60px;" class="col-row" ng-show="canalesMaisvo">
+            <div class="col-md-3">
+                <button ng-show="tableUpd" class="btn btn-info" style="margin-left: 15px;" ng-click="selDataPorProcesar()">
+                    Ver documentos por procesar
+                </button>
+                <button ng-show="!tableUpd" class="btn btn-info" style="margin-left: 15px;" ng-click="backToUpdateMasivo()">
+                    Regresar
+                </button>
+                <button ng-show="!tableUpd" class="btn btn-info" style="margin-left: 15px;" ng-click="selDataPorProcesar()">
+                    Buscar nuevamente
+                </button>
+            </div>
+            <div class="col-md-12" style="margin-top: 40px;">
+                <div ng-show="tableUpd">
+                    <table id="tablaAdminMasivo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Documento Activo</th>
+                                <th>Opcional</th>
+                                <th>Persona Moral</th>
+                                <th>Persona Fisica</th>
+                                <th>Persona Fisica Act. Emp.</th>
+                                <th>Varios Documentos</th>
+                                <th>Guardar / Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="documentoM in listaCrudMasivo">
+                                <td>
+                                    <label>{{documentoM.doc_nombre}}</label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_activo" ng-true-value="1" ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_opcional" ng-true-value="1"ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_moral" ng-true-value="1" ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_fisica" ng-true-value="1" ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_fisicaAE" ng-true-value="1" ng-false-value="0">
+                                </td>
+                                <td>
+                                    <input type="checkbox" ng-model="documentoM.doc_varios" ng-true-value="1" ng-false-value="0">
+                                </td>
+                                <td>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-success" ng-click="saveDataMasivo(documentoM)" data-toggle="tooltip" data-placement="top"  title="Guarda la configuración">
+                                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-danger" ng-click="deleteDataMasivo(documentoM)" data-toggle="tooltip" data-placement="top"  title="Guarda la configuración">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-show="!tableUpd">
+                    <table id="tablaDataMasivo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+                                <th>Documento</th>
+								<th>Proceso</th>
+								<th>Canal</th>
+								<th>Estado</th>
+								<th>Estatus documento</th>
+								<th>Tipo Documento</th>
+								<th>Moral</th>
+								<th>Fisica</th>
+								<th>Fisica Act. Emp.</th>
+                                <th>Documentos Varios</th>
+								<th>Usuario</th>
+								<th>Fecha inicio</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="data in dataDocumentosMasivo">
+								<td>
+									<label>{{data.doc_nombre}}</label>
+								</td>
+								<td>
+									<label>{{data.proceso}}</label>
+								</td>
+								<td>
+									<label>{{data.canal}}</label>
+								</td>
+								<td>
+									<label>{{data.estado}}</label>
+								</td>
+								<td>
+									<label>{{data.activo}}</label>
+								</td>
+								<td>
+									<label>{{data.opcional}}</label>
+								</td>
+								<td>
+									<label>{{data.moral}}</label>
+								</td>
+								<td>
+									<label>{{data.fisica}}</label>
+								</td>
+								<td>
+									<label>{{data.fisicaAE}}</label>
+								</td>
+                                <td>
+									<label>{{data.doc_varios}}</label>
+								</td>
+								<td>
+									<label>{{data.usuario}}</label>
+								</td>
+								<td>
+									<label>{{data.fechaInicio.split('T')[0]}}</label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadModalAdmin" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="cargandoCXP">
+            <div class="loader_CompletoCXP"></div>
+            <div ng-show="sendSaveNewDocument" class="cargandoCXP"
+                style="top: 336px !important; left: 31px !important; font-size: 20px;"><label>Guardando el documento,
+                    este proceso puede tardar varios minutos...</label></div>
+        </div>
+    </div>
+</div>
